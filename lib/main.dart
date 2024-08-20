@@ -1,75 +1,97 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bootcamp/story_brain.dart';
 
-void main() {
-  runApp(const XylophoneApp());
-}
+void main() => runApp(const Destini());
 
-class XylophoneApp extends StatelessWidget {
-  const XylophoneApp({super.key});
-
-  void playSound(int num) {
-    final player = AudioPlayer();
-    player.play(AssetSource("note$num.wav"));
-  }
-
-  void playSoundm4a(int num) {
-    final player = AudioPlayer();
-    player.play(AssetSource("note$num.m4a"));
-  }
-
-  Expanded buildKey(Color color, int soundNumber) {
-    return Expanded(
-      child: TextButton(
-        onPressed: () {
-          playSound(soundNumber);
-        },
-        style: TextButton.styleFrom(
-          elevation: 3,
-          backgroundColor: color,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.zero),
-          ),
-        ),
-        child: Container(),
-      ),
-    );
-  }
-
-  Expanded buildKeym4a(Color color, int soundNumber) {
-    return Expanded(
-      child: TextButton(
-        onPressed: () {
-          playSoundm4a(soundNumber);
-        },
-        style: TextButton.styleFrom(
-          elevation: 3,
-          backgroundColor: color,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.zero),
-          ),
-        ),
-        child: Container(),
-      ),
-    );
-  }
+class Destini extends StatelessWidget {
+  const Destini({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: SafeArea(
+      theme: ThemeData.dark(),
+      home: const StoryPage(),
+    );
+  }
+}
+
+StoryBrain storyBrain = StoryBrain();
+
+class StoryPage extends StatefulWidget {
+  const StoryPage({super.key});
+
+  @override
+  State<StoryPage> createState() => _StoryPageState();
+}
+
+class _StoryPageState extends State<StoryPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/background.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 15.0),
+        constraints: const BoxConstraints.expand(),
+        child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              buildKey(Colors.red, 1),
-              buildKey(Colors.orange, 2),
-              buildKey(Colors.yellow, 3),
-              buildKey(Colors.green, 4),
-              buildKey(Colors.teal, 5),
-              buildKey(Colors.blue, 6),
-              buildKey(Colors.purple, 7),
+            children: <Widget>[
+              Expanded(
+                flex: 12,
+                child: Center(
+                  child: Text(
+                    storyBrain.getStory(),
+                    style: const TextStyle(
+                      fontSize: 25.0,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: TextButton(
+                  onPressed: () {
+                    setState(() {
+                      storyBrain.nextStory(1);
+                    });
+                  },
+                  style: TextButton.styleFrom(backgroundColor: Colors.red),
+                  child: Text(
+                    storyBrain.getChoice1(),
+                    style: const TextStyle(
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              Expanded(
+                flex: 2,
+                child: Visibility(
+                  visible: storyBrain.buttonShouldBeVisible(),
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        storyBrain.nextStory(2);
+                      });
+                    },
+                    style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                    child: Text(
+                      storyBrain.getChoice2(),
+                      style: const TextStyle(
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
