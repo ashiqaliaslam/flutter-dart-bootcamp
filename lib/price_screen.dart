@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'coin_data.dart';
+import 'currency_card.dart';
 
 class PriceScreen extends StatefulWidget {
   const PriceScreen({super.key});
@@ -96,6 +97,24 @@ class _PriceScreenState extends State<PriceScreen> {
     super.deactivate();
   }
 
+  // For bonus points, create a method that loops through the cryptoList and generates a CryptoCard for each. Call makeCards() in the build() method instead of the Column with 3 CryptoCards.
+  Column makeCards() {
+    List<CurrencyCard> cryptoCards = [];
+    for (String crypto in cryptoList) {
+      cryptoCards.add(
+        CurrencyCard(
+          cryptoCurrency: crypto,
+          selectedCurrency: selectedCurrency,
+          value: isWaiting ? '?' : coinValues[crypto],
+        ),
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: cryptoCards,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     log('build() called of PriceScreen');
@@ -107,25 +126,26 @@ class _PriceScreenState extends State<PriceScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Column(
-            children: [
-              CurrencyCard(
-                value: isWaiting ? '?' : coinValues['BTC'],
-                cryptoCurrency: 'BTC',
-                selectedCurrency: selectedCurrency,
-              ),
-              CurrencyCard(
-                value: isWaiting ? '?' : coinValues['ETH'],
-                cryptoCurrency: 'ETH',
-                selectedCurrency: selectedCurrency,
-              ),
-              CurrencyCard(
-                value: isWaiting ? '?' : coinValues['LTC'],
-                cryptoCurrency: 'LTC',
-                selectedCurrency: selectedCurrency,
-              ),
-            ],
-          ),
+          makeCards(),
+          // Column(
+          //   children: [
+          //     CurrencyCard(
+          //       value: isWaiting ? '?' : coinValues['BTC'],
+          //       cryptoCurrency: 'BTC',
+          //       selectedCurrency: selectedCurrency,
+          //     ),
+          //     CurrencyCard(
+          //       value: isWaiting ? '?' : coinValues['ETH'],
+          //       cryptoCurrency: 'ETH',
+          //       selectedCurrency: selectedCurrency,
+          //     ),
+          //     CurrencyCard(
+          //       value: isWaiting ? '?' : coinValues['LTC'],
+          //       cryptoCurrency: 'LTC',
+          //       selectedCurrency: selectedCurrency,
+          //     ),
+          //   ],
+          // ),
           Container(
             height: 150.0,
             alignment: Alignment.center,
@@ -135,44 +155,6 @@ class _PriceScreenState extends State<PriceScreen> {
             // child: getPicker(),
           )
         ],
-      ),
-    );
-  }
-}
-
-class CurrencyCard extends StatelessWidget {
-  const CurrencyCard({
-    super.key,
-    this.value,
-    required this.selectedCurrency,
-    required this.cryptoCurrency,
-  });
-
-  final String? value;
-  final String selectedCurrency;
-  final String cryptoCurrency;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
-      child: Card(
-        color: Colors.lightBlueAccent,
-        elevation: 5.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-          child: Text(
-            '1 $cryptoCurrency = $value $selectedCurrency',
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 20.0,
-              color: Colors.white,
-            ),
-          ),
-        ),
       ),
     );
   }

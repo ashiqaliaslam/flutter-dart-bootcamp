@@ -47,8 +47,6 @@ class CoinData {
 
         double lastPrice = decodedData['rate'];
         cryptoPrices[crypto] = lastPrice.toStringAsFixed(0);
-
-        // return lastPrice;
       } else {
         log(response.statusCode.toString());
         print(response.statusCode);
@@ -58,3 +56,17 @@ class CoinData {
     return cryptoPrices;
   }
 }
+
+
+/// Raw URL
+/// `https://rest.coinapi.io/v1/exchangerate/BTC/USD?apikey=2665C961-861E-4251-BA67-DB441FF599ED`
+/// 
+/// JSON Output
+/// ```md
+/// {
+/// "time": "2024-09-15T15:25:04.0000000Z",
+/// "asset_id_base": "BTC",
+/// "asset_id_quote": "USD",
+/// "rate": 60225.281039239366
+/// }
+
