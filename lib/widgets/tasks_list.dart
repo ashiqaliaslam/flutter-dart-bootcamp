@@ -1,44 +1,35 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bootcamp/models/task_data.dart';
+import 'package:provider/provider.dart';
 
-import '../models/task.dart';
 import 'task_tile.dart';
 
-class TaskList extends StatefulWidget {
+class TaskList extends StatelessWidget {
   const TaskList({
     super.key,
-    required this.tasks,
   });
 
-  final List<Task> tasks;
-
-  @override
-  State<TaskList> createState() => _TaskListState();
-}
-
-class _TaskListState extends State<TaskList> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return TaskTile(
-          taskTitle: widget.tasks[index].name,
-          isChecked: widget.tasks[index].isDone,
-          checkboxCallback: (checkboxState) {
-            setState(() {
-              widget.tasks[index].toggleDone();
-            });
+    return Consumer<TaskData>(
+      builder: (context, taskData, child) {
+        return ListView.builder(
+          itemCount: taskData.taskCount,
+          itemBuilder: (context, index) {
+            final task = taskData.tasks[index];
+            return TaskTile(
+              taskTitle: task.name,
+              isChecked: task.isDone,
+              checkboxCallback: (checkboxState) {
+                taskData.updateTask(task);
+              },
+              longPresCallback: () {
+                taskData.deleteTask(task);
+              },
+            );
           },
         );
       },
-      itemCount: widget.tasks.length,
     );
   }
 }
-
-  // (bool? checkboxState) {
-  //   setState(() {
-  //     isChecked = checkboxState ?? false;
-  //   });
-  // }

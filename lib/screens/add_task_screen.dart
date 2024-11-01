@@ -1,14 +1,11 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bootcamp/models/task_data.dart';
+import 'package:provider/provider.dart';
 
 class AddTaskScreen extends StatelessWidget {
   const AddTaskScreen({
     super.key,
-    required this.addTaskCallback,
   });
-
-  final Function addTaskCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +14,11 @@ class AddTaskScreen extends StatelessWidget {
     return Container(
       // color: Color(0xff757575),
       // color: Colors.white,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
+          const Text(
             'Add Task',
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -41,10 +38,10 @@ class AddTaskScreen extends StatelessWidget {
               backgroundColor: Colors.lightBlueAccent,
             ),
             onPressed: () {
-              addTaskCallback(newTaskTitle);
-              // log(newTaskTitle.toString());
+              context.read<TaskData>().addTask(newTaskTitle);
+              Navigator.pop(context);
             },
-            child: Text(
+            child: const Text(
               'Add',
               style: TextStyle(color: Colors.white),
             ),
